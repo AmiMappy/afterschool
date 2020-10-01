@@ -1,0 +1,25 @@
+<div id="allQues">
+
+</div>
+
+<button (click)="goToSettings()">User Settings</button>
+<button (click)="signOut()">Sign Out</button>
+<button (click)="askBtn()">Ask Question(s)</button>
+<button (click)="fillDocIds(); getMyQues()">Get my Questions</button>
+
+<br><br><br><br>
+
+
+<div id="myQues">
+
+</div>
+<span>Grade(6 to 12)</span>
+<select id="grade-select" [(ngModel)]="grade">
+    <option *ngFor="let gr of grades">{{gr}}</option>
+</select>
+<span>Subject</span>
+<select id="subject-select" [(ngModel)]="subject">
+    <option *ngFor="let sub of subjects">{{sub}}</option>;
+</select>
+<br>
+<button id="getAllQuesBtn" (click)="fillDocIds(); getAllQues()">Get all Questions</button>

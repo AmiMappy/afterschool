@@ -1,0 +1,13 @@
+<img id="prof-pic">
+<label>Choose Profile Picture</label>
+<form id="prof-upload-img">
+    <input type="file" id="imgInput" (change)="onPhotoChange($event)">        
+</form>
+<br><br><br>
+<label>Change Display Name</label>
+<input [(ngModel)]="changedName">
+<button (click)="changeDisplayName()">Change</button>
+
+<button (click)="goToBoard()">HOME</button>
+
+

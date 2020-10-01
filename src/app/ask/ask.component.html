@@ -1,0 +1,42 @@
+<h2>Ask your question</h2>
+<h3>Type in text or add image(s)</h3>
+
+<p></p>
+<p></p>
+<p></p>
+
+
+<div id="ques">
+    <label>Grade(6 to 12)</label>
+    <select id="grade-select" [(ngModel)]="grade">
+        <option *ngFor="let gr of grades">{{gr}}</option>
+    </select> 
+    <label>   Subject/Topic</label>
+    <select id="subject-select" [(ngModel)]="subject">
+        <option *ngFor="let sub of subjects">{{sub}}</option>
+    </select> 
+    <br><br>
+    <span>You can shape the text boxes to fit your needs by dragging from the bottom-right.</span><br>
+    <textarea [(ngModel)]="quesTitle" style="height:20px; width: 600px;" placeholder="What is your question?"></textarea><br>
+    <textarea  [(ngModel)]="quesDesc" style="height:120px; width: 600px;" placeholder="Give a description. You can also add images.(optional)"></textarea>
+    <form id="ques-img">
+        <input type="file" id="imgInput" multiple="multiple" (change)="onChange($event)">        
+    </form>
+    <br><br>
+    <button (click)="uploadQuesImg(filePickEvent); submitQuesText(quesTitle, quesDesc)">Submit</button>
+</div>
+
+
+<div id="test">
+    
+</div>
+
+
+<div id="show-files">
+    
+</div>
+<br><br>
+<button (click)="getQuesBtn()">Get my Questions</button>
+<br><br><br><br><br><br>
+<button (click)="signOut()">sign out</button> 
+<!-- Actually, the sign out button is to be placed in the top bar that remains constant throughout the app.-->

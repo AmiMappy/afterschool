@@ -1,0 +1,9 @@
+<span id="title"></span>
+<span id="description"></span>
+<textarea id="replyBox" cols="100" rows="10" [(ngModel)]="replyText"></textarea>
+<form id="reply-img">
+    <input type="file" id="imgInput" multiple="multiple" (change)="onChange($event)">        
+</form>
+<br><br>
+<div id="show-files"></div>
+<button id="submitReply" (click)="submitReply()">Submit Reply</button>

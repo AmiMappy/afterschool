@@ -1,0 +1,18 @@
+<label>Email: </label>
+<input [(ngModel)]="email">
+<label>Password: </label>
+<input type="password"[(ngModel)]="password">
+<label>Re-type Password: </label>
+<input type="password" [(ngModel)]="rtypepassword">
+
+<!--
+<label>Choose Profile Picture</label>
+<form id="ques-img">
+<input type="file" id="imgInput" (change)="onChange($event)">        
+</form>
+<div id="show_prof">
+
+</div>
+-->
+
+<button id="signup" (click)="emailSignUp(email, password, rtypepassword)">Sign Up</button>
