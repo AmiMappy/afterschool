@@ -2,7 +2,7 @@
 
 A simplistic school related Q&A forum. 
 
-## Desiging pending, help needed
+## Designing pending, help needed
 
 ## Agenda
 1. Points system: earn points upon asking, answering and getting you answer validated.
