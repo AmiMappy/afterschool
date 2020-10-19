@@ -21,12 +21,12 @@ export class ReplyComponent implements OnInit {
   questionUid = ques.uid;
   reply: Reply;
   replyText: string = " ";
-  replierUid: string = " ";
-  firestoreDocId: any = " ";
+  replierUid: string = " ";  
   filePickEvent: any;
-  urls: string[] = [];
-
+  filesLength: any = 0;
+  questionId: any;
   replyId: any;
+
 
   constructor(private afs: AngularFirestore, private router: Router, private auth: AngularFireAuth, private _location: Location, private storage: AngularFireStorage, private conService: ConnectionService) {
     
@@ -34,18 +34,69 @@ export class ReplyComponent implements OnInit {
 
   onChange(event){
     this.filePickEvent = event;
+    this.filesLength = this.filePickEvent.target.files.length;
+  }
+
+  goBack(){
+    this._location.back();
   } 
 
   submitReply(){
-    this.afs.collection<any>("questions", ref => ref.where("title", "==", this.title)).snapshotChanges().subscribe(data => {
-      this.firestoreDocId = data[0].payload.doc.id;
-      //console.log(this.firestoreDocId);
-      this.afs.collection<any>("questions").doc(this.firestoreDocId).collection<any>("replies").add({title: this.title, replierUid: this.replierUid, replyText: this.replyText, urls: this.urls}).then(result => {
-        // console.log(result.id);
-        this.replyId = result.id;
-      })      
-    })
+    let flen = 0;
+    let rid: any;
+    this.afs.collection("questions", ref => ref.where("title", "==", this.title)).snapshotChanges().forEach(doc => {
+      // console.log(doc[0].payload.doc.id);
+      this.questionId = doc[0].payload.doc.id;
+      this.afs.collection("questions").doc(this.questionId).collection("replies").add({replier: this.replierUid, text: this.replyText, quesId: this.questionId, quesTitle: this.title, quesUid: this.questionUid, filesLen: this.filesLength}).then(() => {
+        this.afs.collection("questions").doc(this.questionId).collection("replies", ref => ref.where("replier", "==", this.replierUid).where("text", "==", this.replyText).where("quesId", "==", this.questionId).where("quesTitle", "==", this.title).where("quesUid", "==", this.questionUid)).snapshotChanges().forEach(doc => {
+          this.replyId = doc[0].payload.doc.id;
+          flen = this.filesLength;
+          rid = doc[0].payload.doc.id;
+          if(flen != 0){
+            for(let i = 0; i < flen; i++){
+              const file = this.filePickEvent.target.files[i];
+              const filePath = "Replies/" + rid + "/" + i.toString();
+              const ref = this.storage.ref(filePath);      
+              const task = ref.put(file).then(data => {
+                let filenameelem = document.createElement("P");
+                filenameelem.innerText = `${file.name}`
+                document.getElementById("show-files").appendChild(filenameelem);
+                console.log(`${data}`);
+                window.alert(`Uploaded ${file.name}.`);
+                ref.getDownloadURL().subscribe(ur => {
+                  let img = document.createElement("IMG");         
+                  img.setAttribute("src", ur);
+                  document.getElementById("show-files").appendChild(img);          
+                })
+                i += 1;
+              }).catch(error => {
+                console.log(error);
+                window.alert("An error occured. Please try again.");
+                i += 1;
+              });      
+            }
+          } else {
+            ;
+          }
+        })
+      });
+    })   
   }
+  // The below belongs to the submitReply() method.
+  /*
+  this.afs.collection("questions").doc(this.firestoreDocId).collection("replies").add({replier: this.replierUid, replyText: this.replyText, title: this.title}).then(data => {
+    console.log(data);
+  }).then(() => {
+    this.afs.collection("questions").doc(this.firestoreDocId).collection("replies", ref => ref.where("replier", "==", this.replierUid)).snapshotChanges().forEach(data => {
+      console.log(data);
+    })
+  })
+  */
+  /*      
+  setTimeout(() => {
+    this.uploadImgs();
+  }, 5000);    
+  */
 
   ngOnInit(): void {
     if(this.title == "Unset"){
@@ -55,12 +106,11 @@ export class ReplyComponent implements OnInit {
       document.getElementById("title").innerText = this.title;
       document.getElementById("description").innerText = this.desc;
       this.auth.onAuthStateChanged(user => {
-        this.replierUid = user.uid;
+        this.replierUid = user.uid;        
         console.log(typeof(this.replierUid));
         console.log(this.replierUid);
       })
     }
-
     /*
     let docId;
     this.afs.collection("questions", ref => ref.where("title", "==", this.title)).snapshotChanges().forEach(doc => {
