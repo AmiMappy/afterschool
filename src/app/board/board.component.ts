@@ -98,24 +98,48 @@ export class BoardComponent implements OnInit {
           let title = data[item]['title'];
           if(data[item]['uid'] == this.strUid){
             let replies = document.createElement("DIV");
-          this.collection.doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
-            for(let item in data){
-              let replier: any;
-              let replyText: string;
-              // console.log(data[item]);
-              replier =  data[item]['replierUid'];
-              replyText = data[item]['replyText'];
-              // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon...).
-              let reply = document.createElement("SPAN");
-              if(replier == this.strUid){
-                reply.innerText = "YOU " + "replied:- " + replyText + "\n";
-              } else {
-                reply.innerText = replier + " replies:- " + replyText + "\n";
+            let replyDocIds: any = [];
+
+            this.collection.doc(this.docIds[item]).collection("replies").snapshotChanges().forEach(doc => {
+              for(let item in doc){
+                replyDocIds.push(doc[item].payload.doc.id);
+                console.log(replyDocIds);
+              }              
+            })
+
+            this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
+              for(let item in data){
+                let replier: any;
+                let replyText: string;
+                // console.log(data[item]);
+                replier =  data[item]['replier'];
+                replyText = data[item]['text'];
+                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
+                let reply = document.createElement("SPAN");               
+  
+                if(replier == this.strUid){
+                  reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
+                } else {
+                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                }
+                reply.setAttribute("style", "color:green");
+                replies.appendChild(reply);
+
+                if(data[item]['filesLen'] != 0){
+                  for(let i = 0; i < data[item]['filesLen']; i++){
+                    let replyImg = document.createElement("IMG");
+                    const replyRef = this.storage.ref(`Replies/${replyDocIds[item]}/${i.toString()}`);
+                    replyRef.getDownloadURL().subscribe(url => {
+                      replyImg.setAttribute("src", url);
+                    })
+                    replies.appendChild(replyImg);
+                  }
+                } else {
+                  ;
+                }
+
               }
-              reply.setAttribute("style", "color:green");
-              replies.appendChild(reply);
-            }
-          })                   
+            })                   
           let replyBtn = document.createElement("BUTTON");
           replyBtn.setAttribute("id", data[item]['title']);
           replyBtn.onclick = function(){
@@ -168,17 +192,24 @@ export class BoardComponent implements OnInit {
             let rter = this.router;
             let title = data[item]['title'];
             let replies = document.createElement("DIV");
-            let lineBr = document.createElement("SPAN");
-            lineBr.innerText = "\n\n";
-            this.afs.collection("questions", ref => ref.where("subject", "==", this.subject)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
+            let replyDocIds: any = [];
+
+            this.collection.doc(this.docIds[item]).collection("replies").snapshotChanges().forEach(doc => {
+              for(let item in doc){
+                replyDocIds.push(doc[item].payload.doc.id);
+                console.log(replyDocIds);
+              }              
+            })
+
+            this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
                 let replier: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replierUid'];
-                replyText = data[item]['replyText'];
-                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon...).
-                let reply = document.createElement("SPAN");         
+                replier =  data[item]['replier'];
+                replyText = data[item]['text'];
+                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
+                let reply = document.createElement("SPAN");               
   
                 if(replier == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
@@ -187,7 +218,20 @@ export class BoardComponent implements OnInit {
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
-                replies.appendChild(lineBr);               
+
+                if(data[item]['filesLen'] != 0){
+                  for(let i = 0; i < data[item]['filesLen']; i++){
+                    let replyImg = document.createElement("IMG");
+                    const replyRef = this.storage.ref(`Replies/${replyDocIds[item]}/${i.toString()}`);
+                    replyRef.getDownloadURL().subscribe(url => {
+                      replyImg.setAttribute("src", url);
+                    })
+                    replies.appendChild(replyImg);
+                  }
+                } else {
+                  ;
+                }
+
               }
             })                   
             let replyBtn = document.createElement("BUTTON");
@@ -237,17 +281,25 @@ export class BoardComponent implements OnInit {
       } else if(this.subject == "All" && this.grade != "All"){
         this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).valueChanges().forEach(data => {
           for(let item in data){
-            let rter = this.router;
-            let title = data[item]['title'];
+
             let replies = document.createElement("DIV");
+            let replyDocIds: any = [];
+
+            this.collection.doc(this.docIds[item]).collection("replies").snapshotChanges().forEach(doc => {
+              for(let item in doc){
+                replyDocIds.push(doc[item].payload.doc.id);
+                console.log(replyDocIds);
+              }              
+            })
+
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
                 let replier: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replierUid'];
-                replyText = data[item]['replyText'];
-                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon...).
+                replier =  data[item]['replier'];
+                replyText = data[item]['text'];
+                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
                 if(replier == this.strUid){
@@ -258,8 +310,24 @@ export class BoardComponent implements OnInit {
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
 
+                if(data[item]['filesLen'] != 0){
+                  for(let i = 0; i < data[item]['filesLen']; i++){
+                    let replyImg = document.createElement("IMG");
+                    const replyRef = this.storage.ref(`Replies/${replyDocIds[item]}/${i.toString()}`);
+                    replyRef.getDownloadURL().subscribe(url => {
+                      replyImg.setAttribute("src", url);
+                    })
+                    replies.appendChild(replyImg);
+                  }
+                } else {
+                  ;
+                }
+
               }
-            })                   
+            })
+
+            let rter = this.router;
+            let title = data[item]['title'];                   
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -307,17 +375,27 @@ export class BoardComponent implements OnInit {
       } else if(this.grade == "All" && this.subject == "All"){
         this.collection.valueChanges().forEach(data => {
           for(let item in data){
-            let rter = this.router;
-            let title = data[item]['title'];
+            
+            //Replies with images: STARTS
+
             let replies = document.createElement("DIV");
-            this.collection.doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
+            let replyDocIds: any = [];
+
+            this.collection.doc(this.docIds[item]).collection("replies").snapshotChanges().forEach(doc => {
+              for(let item in doc){
+                replyDocIds.push(doc[item].payload.doc.id);
+                console.log(replyDocIds);
+              }              
+            })
+
+            this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
                 let replier: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replierUid'];
-                replyText = data[item]['replyText'];
-                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon...).
+                replier =  data[item]['replier'];
+                replyText = data[item]['text'];
+                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
                 if(replier == this.strUid){
@@ -328,17 +406,26 @@ export class BoardComponent implements OnInit {
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
 
-                for(let i = 0; i < data[item]['filesLen']; i++){
-                  let replyImg = document.createElement("IMG");
-                  const replyRef = this.storage.ref("Questions/" + replier + "/Reply_" + title + i.toString());
-                  replyRef.getDownloadURL().subscribe(url => {
-                    replyImg.setAttribute("src", url);
-                  })
-                  replies.appendChild(replyImg);
+                if(data[item]['filesLen'] != 0){
+                  for(let i = 0; i < data[item]['filesLen']; i++){
+                    let replyImg = document.createElement("IMG");
+                    const replyRef = this.storage.ref(`Replies/${replyDocIds[item]}/${i.toString()}`);
+                    replyRef.getDownloadURL().subscribe(url => {
+                      replyImg.setAttribute("src", url);
+                    })
+                    replies.appendChild(replyImg);
+                  }
+                } else {
+                  ;
                 }
 
               }
-            })                   
+            })
+
+            //Replies with images: ENDS
+
+            let rter = this.router;
+            let title = data[item]['title'];                   
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -373,14 +460,8 @@ export class BoardComponent implements OnInit {
             allQuesDiv.appendChild(titleElem);
             allQuesDiv.appendChild(descElem);
             allQuesDiv.appendChild(imgElem);
-            allQuesDiv.appendChild(br);
-            allQuesDiv.appendChild(br);
-            allQuesDiv.appendChild(replies);
-            allQuesDiv.appendChild(br);
             allQuesDiv.appendChild(replyBtn);
-            allQuesDiv.appendChild(br);
-            allQuesDiv.appendChild(br); 
-            allQuesDiv.appendChild(br);         
+            allQuesDiv.appendChild(replies);
           }
         })
       } else {
@@ -389,15 +470,24 @@ export class BoardComponent implements OnInit {
             let rter = this.router;
             let title = data[item]['title'];
             let replies = document.createElement("DIV");
-            this.afs.collection("questions", ref => ref.where("grade", "==", this.grade).where("subject", "==", this.subject)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
+            let replyDocIds: any = [];
+
+            this.collection.doc(this.docIds[item]).collection("replies").snapshotChanges().forEach(doc => {
+              for(let item in doc){
+                replyDocIds.push(doc[item].payload.doc.id);
+                console.log(replyDocIds);
+              }              
+            })
+
+            this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
                 let replier: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replierUid'];
-                replyText = data[item]['replyText'];
-                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon...).
-                let reply = document.createElement("SPAN");                
+                replier =  data[item]['replier'];
+                replyText = data[item]['text'];
+                // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
+                let reply = document.createElement("SPAN");               
   
                 if(replier == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
@@ -406,8 +496,22 @@ export class BoardComponent implements OnInit {
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
+
+                if(data[item]['filesLen'] != 0){
+                  for(let i = 0; i < data[item]['filesLen']; i++){
+                    let replyImg = document.createElement("IMG");
+                    const replyRef = this.storage.ref(`Replies/${replyDocIds[item]}/${i.toString()}`);
+                    replyRef.getDownloadURL().subscribe(url => {
+                      replyImg.setAttribute("src", url);
+                    })
+                    replies.appendChild(replyImg);
+                  }
+                } else {
+                  ;
+                }
+
               }
-            })                   
+            })                  
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -468,6 +572,7 @@ export class BoardComponent implements OnInit {
     this.allQuesLoaded = false;
     this.myQuesLoaded = false;
     this.fillDocIds();
-    this.getAllQues();
+    // this.getAllQues();
+    // this.getMyQues();
   }
 }
