@@ -98,11 +98,9 @@ export class AskComponent implements OnInit {
         console.log(data['id']);
       })
       */
-      if(this.grade >= 6 && this.grade <= 12){
+      if((this.grade >= 6 && this.grade <= 12) || this.grade == "Any"){
         this.questionsRef.add({title: t, description: d, grade: this.grade, subject: this.subject, uid: this.strUid, date: this.dt.getDate(), filesLen: this.noOfFiles});
         quesRef = this.questionsRef;
-      } else {
-
       }
     }            
   }
