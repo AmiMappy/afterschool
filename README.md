@@ -1,11 +1,8 @@
 # Afterschool
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 A simple school related Q&A forum.
 =======
 A simplistic school related Q&A forum.
->>>>>>> ad9742b91cc6cf016cf6c24cbfdc7dc87a0cab6e
 =======
 A simplistic school related Q&A forum. 
 
@@ -20,6 +17,6 @@ A simplistic school related Q&A forum.
 4. Try helping with as many issues as possible
 
 ## Pending
-1. Images with repies: Currently images can only be uploaded with questions.
-2. Designing
->>>>>>> 4463cb00fefd6a049461acb1fa8ccf6e57383b59
+1. Designing
+2. So much more!(see issues)
+
