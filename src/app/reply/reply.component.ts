@@ -26,7 +26,7 @@ export class ReplyComponent implements OnInit {
   filesLength: any = 0;
   questionId: any;
   replyId: any;
-
+  replierDispName: any = "";
 
   constructor(private afs: AngularFirestore, private router: Router, private auth: AngularFireAuth, private _location: Location, private storage: AngularFireStorage, private conService: ConnectionService) {
     
@@ -39,7 +39,7 @@ export class ReplyComponent implements OnInit {
 
   goBack(){
     this._location.back();
-  } 
+  }
 
   submitReply(){
     let flen = 0;
@@ -47,7 +47,7 @@ export class ReplyComponent implements OnInit {
     this.afs.collection("questions", ref => ref.where("title", "==", this.title)).snapshotChanges().forEach(doc => {
       // console.log(doc[0].payload.doc.id);
       this.questionId = doc[0].payload.doc.id;
-      this.afs.collection("questions").doc(this.questionId).collection("replies").add({replier: this.replierUid, text: this.replyText, quesId: this.questionId, quesTitle: this.title, quesUid: this.questionUid, filesLen: this.filesLength}).then(() => {
+      this.afs.collection("questions").doc(this.questionId).collection("replies").add({replierUid: this.replierUid, replierDispName: this.replierDispName, text: this.replyText, quesId: this.questionId, quesTitle: this.title, quesUid: this.questionUid, filesLen: this.filesLength}).then(() => {
         this.afs.collection("questions").doc(this.questionId).collection("replies", ref => ref.where("replier", "==", this.replierUid).where("text", "==", this.replyText).where("quesId", "==", this.questionId).where("quesTitle", "==", this.title).where("quesUid", "==", this.questionUid)).snapshotChanges().forEach(doc => {
           this.replyId = doc[0].payload.doc.id;
           flen = this.filesLength;
@@ -106,7 +106,12 @@ export class ReplyComponent implements OnInit {
       document.getElementById("title").innerText = this.title;
       document.getElementById("description").innerText = this.desc;
       this.auth.onAuthStateChanged(user => {
-        this.replierUid = user.uid;        
+        this.replierUid = user.uid;
+        if(user.displayName == undefined){
+          this.replierDispName = this.replierUid;
+        } else {
+          this.replierDispName = user.displayName;
+        }
         console.log(typeof(this.replierUid));
         console.log(this.replierUid);
       })
