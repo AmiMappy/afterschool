@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "afterschool"
+    }
+  },
+  "defaultProject": "afterschool",
+  "cli": {
+    "analytics": "2973cf50-a8b3-4ad1-8c86-3cb5522e17cc"
+  }
 }

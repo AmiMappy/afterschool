@@ -1,8 +1,15 @@
-<p>Login with Google: </p>
-<button (click)="goLogin()">Login with Google</button>
-<p>OR Login with Email and Password: </p>
+<h1>Login</h1>
+<div class="form">
+<h2>Login with Google: </h2>
+<button (click)="goLogin()"><img src="google.png"></button>
+<h2>Or Login with Email and Password: </h2>
 <label>Email: </label>
+<br>
 <input [(ngModel)]="email">
+<br>
 <label>Password: </label>
+<br>
 <input [(ngModel)]="password" type="password">
-<button (click)="emLogin()">Login with Email and Password</button>
+<br>
+<button (click)="emLogin()">Login</button>
+</div>
