@@ -97,6 +97,8 @@ export class BoardComponent implements OnInit {
           let rter = this.router;
           let title = data[item]['title'];
           if(data[item]['uid'] == this.strUid){
+
+            // Replies BEGINS
             let replies = document.createElement("DIV");
             let replyDocIds: any = [];
 
@@ -109,18 +111,20 @@ export class BoardComponent implements OnInit {
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
-                let replier: any;
+                let replierUid: any;
+                let replierDispName: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replier'];
+                replierUid =  data[item]['replierUid'];
+                replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
-                if(replier == this.strUid){
+                if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
                 } else {
-                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                  reply.innerText = replierDispName + "\t\treplies:-\t\t" + replyText + "\n";
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
@@ -139,7 +143,9 @@ export class BoardComponent implements OnInit {
                 }
 
               }
-            })                   
+            })
+          // Replies ENDS 
+
           let replyBtn = document.createElement("BUTTON");
           replyBtn.setAttribute("id", data[item]['title']);
           replyBtn.onclick = function(){
@@ -191,6 +197,8 @@ export class BoardComponent implements OnInit {
           for(let item in data){
             let rter = this.router;
             let title = data[item]['title'];
+
+            // Replies BEGINS
             let replies = document.createElement("DIV");
             let replyDocIds: any = [];
 
@@ -203,18 +211,20 @@ export class BoardComponent implements OnInit {
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
-                let replier: any;
+                let replierUid: any;
+                let replierDispName: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replier'];
+                replierUid =  data[item]['replierUid'];
+                replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
-                if(replier == this.strUid){
+                if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
                 } else {
-                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                  reply.innerText = replierDispName + "\t\treplies:-\t\t" + replyText + "\n";
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
@@ -233,7 +243,9 @@ export class BoardComponent implements OnInit {
                 }
 
               }
-            })                   
+            })               
+            // Replies ENDS
+
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -281,7 +293,10 @@ export class BoardComponent implements OnInit {
       } else if(this.subject == "All" && this.grade != "All"){
         this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).valueChanges().forEach(data => {
           for(let item in data){
+            let rter = this.router;
+            let title = data[item]['title'];
 
+            // Replies BEGINS 
             let replies = document.createElement("DIV");
             let replyDocIds: any = [];
 
@@ -294,18 +309,20 @@ export class BoardComponent implements OnInit {
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
-                let replier: any;
+                let replierUid: any;
+                let replierDispName: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replier'];
+                replierUid =  data[item]['replierUid'];
+                replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
-                if(replier == this.strUid){
+                if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
                 } else {
-                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                  reply.innerText = replierDispName + "\t\treplies:-\t\t" + replyText + "\n";
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
@@ -325,9 +342,8 @@ export class BoardComponent implements OnInit {
 
               }
             })
-
-            let rter = this.router;
-            let title = data[item]['title'];                   
+            // Replies ENDS
+                               
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -375,9 +391,10 @@ export class BoardComponent implements OnInit {
       } else if(this.grade == "All" && this.subject == "All"){
         this.collection.valueChanges().forEach(data => {
           for(let item in data){
+            let rter = this.router;
+            let title = data[item]['title']; 
             
-            //Replies with images: STARTS
-
+            //Replies BEGINS
             let replies = document.createElement("DIV");
             let replyDocIds: any = [];
 
@@ -390,18 +407,20 @@ export class BoardComponent implements OnInit {
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
-                let replier: any;
+                let replierUid: any;
+                let replierDispName: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replier'];
+                replierUid =  data[item]['replierUid'];
+                replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
-                if(replier == this.strUid){
+                if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
                 } else {
-                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                  reply.innerText = replierDispName + "\t\treplies:-\t\t" + replyText + "\n";
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
@@ -421,11 +440,8 @@ export class BoardComponent implements OnInit {
 
               }
             })
+            //Replies ENDS
 
-            //Replies with images: ENDS
-
-            let rter = this.router;
-            let title = data[item]['title'];                   
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){
@@ -469,6 +485,8 @@ export class BoardComponent implements OnInit {
           for(let item in data){
             let rter = this.router;
             let title = data[item]['title'];
+
+            //Replies BEGINS
             let replies = document.createElement("DIV");
             let replyDocIds: any = [];
 
@@ -481,18 +499,20 @@ export class BoardComponent implements OnInit {
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
-                let replier: any;
+                let replierUid: any;
+                let replierDispName: any;
                 let replyText: string;
                 // console.log(data[item]);
-                replier =  data[item]['replier'];
+                replierUid =  data[item]['replierUid'];
+                replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
-                if(replier == this.strUid){
+                if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
                 } else {
-                  reply.innerText = replier + "\t\treplies:-\t\t" + replyText + "\n";
+                  reply.innerText = replierDispName + "\t\treplies:-\t\t" + replyText + "\n";
                 }
                 reply.setAttribute("style", "color:green");
                 replies.appendChild(reply);
@@ -511,7 +531,9 @@ export class BoardComponent implements OnInit {
                 }
 
               }
-            })                  
+            })
+            // Replies ENDS
+            
             let replyBtn = document.createElement("BUTTON");
             replyBtn.setAttribute("id", data[item]['title']);
             replyBtn.onclick = function(){

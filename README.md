@@ -1,6 +1,11 @@
-<h1 align="center"> Afterschool</h1>
-<hr>
-<p align="center">A simplistic Q&A forum for schools.</p>
+=======
+# Afterschool
+
+A simple school related Q&A forum.
+=======
+A simplistic school related Q&A forum.
+=======
+A simplistic school related Q&A forum. 
 
 ## About
 
@@ -20,6 +25,7 @@ ng serve --open
 
 ## For Developers
 
+
 This project was made with :heart: with Angular and Firebase.
 <br>
 But you don't have to know either to contribute! Let me know if something is wrong or could be done better, write documentation and tutorials, just do anything you do best to make it a better and efficient experience for its users. Also, try helping with as many issues as possible.
@@ -28,3 +34,14 @@ But you don't have to know either to contribute! Let me know if something is wro
 
 1. Images with replies: Currently images can only be uploaded with questions.
 2. UI/UX Redesign
+=======
+1. Made with :heart: with Angular
+2. Firebase too
+3. You don't have to know either to contribute! Let me know if something is wrong or could be done better, write documentations and tutorials, just do anything in your might to make it a better and efficient experience for its users.
+4. Try helping with as many issues as possible
+
+## Pending
+1. Designing
+2. So much more!(see issues)
+
+
