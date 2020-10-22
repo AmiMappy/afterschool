@@ -1,9 +1,19 @@
+<h1>Sign Up!</h1>
+
+<div class="form">
+<form>
 <label>Email: </label>
+<br>
 <input [(ngModel)]="email">
+<br>
 <label>Password: </label>
+<br>
 <input type="password"[(ngModel)]="password">
+<br>
 <label>Re-type Password: </label>
+<br>
 <input type="password" [(ngModel)]="rtypepassword">
+<br>
 
 <!--
 <label>Choose Profile Picture</label>
@@ -16,3 +26,5 @@
 -->
 
 <button id="signup" (click)="emailSignUp(email, password, rtypepassword)">Sign Up</button>
+</form>
+</div>
