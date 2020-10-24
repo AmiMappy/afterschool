@@ -9,6 +9,7 @@ import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Question } from '../Question';
 import { ConnectionService } from 'ng-connection-service';
+import { stringify } from 'querystring';
 
 export var ques: Question = new Question("Unset", "Unset", "Unset");
 
@@ -118,6 +119,17 @@ export class BoardComponent implements OnInit {
                 replierUid =  data[item]['replierUid'];
                 replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
+                let profPic = document.createElement("IMG");
+                let profilePic: any;
+                const profPicRef = this.storage.ref(`Users/${replierUid}/Profile_Picture`);
+                profPicRef.getDownloadURL().subscribe(url => {
+                  profilePic = url;
+                  profPic.setAttribute("src", profilePic);
+                  console.log(profilePic);
+                  console.log(profPic);
+                  profPic.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
+                });
+                replies.appendChild(profPic);
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
@@ -218,6 +230,17 @@ export class BoardComponent implements OnInit {
                 replierUid =  data[item]['replierUid'];
                 replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
+                let profilePic: any;
+                let profPic = document.createElement("IMG");
+                const profPicRef = this.storage.ref(`Users/${replierUid}/Profile_Picture`);
+                profPicRef.getDownloadURL().subscribe(url => {
+                  profilePic = url;
+                  profPic.setAttribute("src", profilePic);
+                  console.log(profilePic);
+                  console.log(profPic);
+                  profPic.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
+                });
+                replies.appendChild(profPic);
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
@@ -316,6 +339,17 @@ export class BoardComponent implements OnInit {
                 replierUid =  data[item]['replierUid'];
                 replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
+                let profPic = document.createElement("IMG");
+                let profilePic: any;
+                const profPicRef = this.storage.ref(`Users/${replierUid}/Profile_Picture`);
+                profPicRef.getDownloadURL().subscribe(url => {
+                  profilePic = url;
+                  profPic.setAttribute("src", profilePic);
+                  console.log(profilePic);
+                  console.log(profPic);
+                  profPic.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
+                });
+                replies.appendChild(profPic);
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
@@ -414,6 +448,19 @@ export class BoardComponent implements OnInit {
                 replierUid =  data[item]['replierUid'];
                 replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
+
+                let profPic = document.createElement("IMG");
+                let profilePic: any;
+                const profPicRef = this.storage.ref(`Users/${replierUid}/Profile_Picture`);
+                profPicRef.getDownloadURL().subscribe(url => {
+                  profilePic = url;
+                  profPic.setAttribute("src", profilePic);
+                  console.log(profilePic);
+                  console.log(profPic);
+                  profPic.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
+                });
+                replies.appendChild(profPic);               
+                
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
                 let reply = document.createElement("SPAN");               
   
@@ -496,6 +543,7 @@ export class BoardComponent implements OnInit {
                 console.log(replyDocIds);
               }              
             })
+            // img.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
 
             this.afs.collection("questions", ref => ref.where("grade", "==", this.grade)).doc(this.docIds[item]).collection<any>("replies").valueChanges().forEach(data => {
               for(let item in data){
@@ -506,8 +554,19 @@ export class BoardComponent implements OnInit {
                 replierUid =  data[item]['replierUid'];
                 replierDispName = data[item]['replierDispName'];
                 replyText = data[item]['text'];
+                let profPic = document.createElement("IMG");
+                let profilePic: any;
+                const profPicRef = this.storage.ref(`Users/${replierUid}/Profile_Picture`);
+                profPicRef.getDownloadURL().subscribe(url => {
+                  profilePic = url;
+                  profPic.setAttribute("src", profilePic);
+                  console.log(profilePic);
+                  console.log(profPic);
+                  profPic.setAttribute("style", "border-radius: 50%; height: 100px; box-shadow: 5px 2px #888888");
+                });
+                replies.appendChild(profPic);
                 // ultimately, we're going to have a mapping (sort of) of uids to usernames(i'll add usernames soon(maybe never)...).
-                let reply = document.createElement("SPAN");               
+                let reply = document.createElement("SPAN");
   
                 if(replierUid == this.strUid){
                   reply.innerText = "YOU" + "\t\treplied:-\t\t" + replyText + "\n";
@@ -529,8 +588,9 @@ export class BoardComponent implements OnInit {
                 } else {
                   ;
                 }
-
+                
               }
+              
             })
             // Replies ENDS
             
