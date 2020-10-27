@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Reply } from '../Reply';
 import { ConnectionService } from 'ng-connection-service';
+import { reloaded } from '../board/board.component';
 
 export var quesRef;
 
@@ -29,6 +30,7 @@ export class AskComponent implements OnInit {
   quesDesc: string;
   quesTags: string[];
   filePickEvent: any;
+  filesLen: any = 0;
   tags: object;
   questionsRef = this.afs.collection<any>("questions");
   // quesDocRef = this.afs.doc("questions/" + this.strUid);
@@ -41,54 +43,58 @@ export class AskComponent implements OnInit {
 
   onChange(event){
     this.filePickEvent = event;
+    this.filesLen = this.filePickEvent.length;
   }
 
-  uploadQuesImg(event) {
-    
-    // Image submission to Cloud Storage
-    for(let i = 0; i < event.target.files.length; i++){
-      /*
-      let imgElem = document.getElementById("image-viewer").appendChild(document.createElement("IMG"));
-      imgElem.setAttribute("src", "#");
-      imgElem.setAttribute("id", "uploadPreview");
-      imgElem.setAttribute("width", "700");
-      imgElem.setAttribute("height", "140");
-      var oFReader = new FileReader();
-      oFReader.readAsDataURL(event.target.files[i]);
-      oFReader.onload = function (oFREvent) {
-        document.getElementById("uploadPreview").setAttribute("src", oFREvent.target.result.toString());
-      };
-      */
-      this.noOfFiles = event.target.files.length;
-      const file = event.target.files[i];
-      const filePath = 'Questions/' + this.strUid + "/" + this.quesTitle + i.toString();
-      const ref = this.storage.ref(filePath);
-      if(this.quesTitle != ""){
-        const task = ref.put(file).then(data => {
-          let filenameelem = document.createElement("P");
-          filenameelem.innerText = `${file.name}`
-          document.getElementById("show-files").appendChild(filenameelem);
-          console.log(`${data}`);
-          window.alert(`Uploaded ${file.name}.`);
-          ref.getDownloadURL().subscribe(ur => {
-            let img = document.createElement("IMG");
-            /*var delBtn = document.createElement("BUTTON");
-            delBtn.innerText = "Un-upload " + file.name;
-            delBtn.setAttribute("ng-click", `${ref.child(file.name).delete()}`);*/
-            img.setAttribute("src", ur);
-            document.getElementById("show-files").appendChild(img);
-            /*document.getElementById("show-files").appendChild(delBtn);*/
-          })
-          i += 1;
-        }).catch(error => {
-          console.log(error);
-          window.alert("An error occured. Please try again.");
-          i += 1;
-        });
-      } else {
-        window.alert("Please add a title.");
+  uploadQuesImg() {
+    if(this.filesLen != 0){
+      for(let i = 0; i < this.filesLen; i++){
+        /*
+        let imgElem = document.getElementById("image-viewer").appendChild(document.createElement("IMG"));
+        imgElem.setAttribute("src", "#");
+        imgElem.setAttribute("id", "uploadPreview");
+        imgElem.setAttribute("width", "700");
+        imgElem.setAttribute("height", "140");
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(event.target.files[i]);
+        oFReader.onload = function (oFREvent) {
+          document.getElementById("uploadPreview").setAttribute("src", oFREvent.target.result.toString());
+        };
+        */
+        // Image submission to Cloud Storage
+        this.noOfFiles = this.filesLen;
+        const file = this.filePickEvent.target.files[i];
+        const filePath = 'Questions/' + this.strUid + "/" + this.quesTitle + i.toString();
+        const ref = this.storage.ref(filePath);
+        if(this.quesTitle != ""){
+          const task = ref.put(file).then(data => {
+            let filenameelem = document.createElement("P");
+            filenameelem.innerText = `${file.name}`
+            document.getElementById("show-files").appendChild(filenameelem);
+            console.log(`${data}`);
+            window.alert(`Uploaded ${file.name}.`);
+            ref.getDownloadURL().subscribe(ur => {
+              let img = document.createElement("IMG");
+              /*var delBtn = document.createElement("BUTTON");
+              delBtn.innerText = "Un-upload " + file.name;
+              delBtn.setAttribute("ng-click", `${ref.child(file.name).delete()}`);*/
+              img.setAttribute("src", ur);
+              document.getElementById("show-files").appendChild(img);
+              /*document.getElementById("show-files").appendChild(delBtn);*/
+            })
+            i += 1;
+          }).catch(error => {
+            console.log(error);
+            window.alert("An error occured. Please try again.");
+            i += 1;
+          });
+        } else {
+          window.alert("Please add a title.");
+        }
       }
-    }          
+    } else {
+      ;
+    }              
   }
 
   submitQuesText(t: string, d: string){    
@@ -99,7 +105,9 @@ export class AskComponent implements OnInit {
       })
       */
       if((this.grade >= 6 && this.grade <= 12) || this.grade == "Any"){
-        this.questionsRef.add({title: t, description: d, grade: this.grade, subject: this.subject, uid: this.strUid, date: this.dt.getDate(), filesLen: this.noOfFiles});
+        this.questionsRef.add({title: t, description: d, grade: this.grade, subject: this.subject, uid: this.strUid, date: this.dt.getDate(), filesLen: this.filesLen}).then(() => {
+          window.alert("Uploaded question.");
+        });
         quesRef = this.questionsRef;
       }
     }            
@@ -119,6 +127,10 @@ export class AskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(reloaded == "YES"){
+      window.alert("Page reloaded, exiting...");
+      this.router.navigate(["board"]);
+    }
     this.auth.onAuthStateChanged(us => {
       this.usr = us;
       this.strUid = this.usr.uid.toString();

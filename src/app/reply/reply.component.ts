@@ -75,8 +75,9 @@ export class ReplyComponent implements OnInit {
                 i += 1;
               });      
             }
+            window.alert("Uploaded reply.");
           } else {
-            ;
+            window.alert("Uploaded reply.");
           }
         })
       });
