@@ -12,6 +12,7 @@ import { ConnectionService } from 'ng-connection-service';
 import { stringify } from 'querystring';
 
 export var ques: Question = new Question("Unset", "Unset", "Unset");
+export var reloaded: string = "YES";
 
 @Component({
   selector: 'app-board',
@@ -52,6 +53,7 @@ export class BoardComponent implements OnInit {
 
   askBtn(){
     window.alert("You are moving to the ask page. Post images of or type in text the question(s) you'd like to ask.");
+    reloaded = "NO";
     this.router.navigate(['ask']);
   }
 
