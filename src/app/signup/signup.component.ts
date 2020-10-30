@@ -28,8 +28,8 @@ export class SignupComponent implements OnInit {
         console.log(`Created user successfully.`);
         this.auth.signInWithEmailAndPassword(em, ps).then(data => {
           console.log(data);
-          window.alert(`Welcome! You'll be redirected to you board now...`);
-          this.router.navigate(['board']);
+          window.alert(`Welcome!`);
+          this.router.navigate(['settings']);
         }).catch(error => {
           console.log(error);
           window.alert("Oops! An error occured. Please try again!");

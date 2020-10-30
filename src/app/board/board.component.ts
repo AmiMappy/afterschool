@@ -657,6 +657,6 @@ export class BoardComponent implements OnInit {
     this.myQuesLoaded = false;
     this.fillDocIds();
     // this.getAllQues();
-    // this.getMyQues();
+    this.getMyQues();
   }
 }
